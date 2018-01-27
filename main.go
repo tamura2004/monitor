@@ -10,7 +10,7 @@ import (
 
 func main() {
 	r := chi.NewRouter()
-	r.Get("/netstat", func(w http.ResponseWriter, req *http.Request) {
+	r.Get("/", func(w http.ResponseWriter, req *http.Request) {
 		cmd := exec.Command("netstat", "-na")
 		out, err := cmd.StdoutPipe()
 		if err != nil {
