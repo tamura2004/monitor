@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/pressly/chi"
 	"io"
 	"log"
 	"net/http"
@@ -8,8 +9,9 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		cmd := exec.Command("vmstat")
+	r := chi.NewRouter()
+	r.Get("/netstat", func(w http.ResponseWriter, req *http.Request) {
+		cmd := exec.Command("netstat", "-na")
 		out, err := cmd.StdoutPipe()
 		if err != nil {
 			log.Fatal(err)
@@ -18,6 +20,5 @@ func main() {
 		io.Copy(w, out)
 	})
 
-	http.ListenAndServe(":3333", nil)
-
+	http.ListenAndServe(":3333", r)
 }
